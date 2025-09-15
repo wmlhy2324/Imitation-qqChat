@@ -236,10 +236,6 @@ CREATE TABLE `users` (
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 打开一个 Pull Request
 
-## 📄 许可证
-
-本项目基于MIT许可证开源。查看 [LICENSE](LICENSE) 文件了解更多细节。
-
 ## 📞 联系方式
 
 如有问题或建议，欢迎通过以下方式联系：
