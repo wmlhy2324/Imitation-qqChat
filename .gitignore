@@ -17,4 +17,9 @@ bin/
 
 # Dependency directories (remove the comment below to include it)
 vendor/
-
+# MongoDB 数据文件
+/components/mongo/data/*.wt
+/components/mongo/data/journal/
+/components/mongo/data/ WiredTiger*
+/components/mongo/data/lock
+/components/mongo/data/mongod.lock
