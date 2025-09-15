@@ -1,0 +1,21 @@
+Name: im.ws
+ListenOn: 0.0.0.0:10090
+redisx:
+  host: 192.168.117.80:16379
+  pass: easy-im
+JwtAuth:
+  AccessSecret: imooc.com
+
+Mongo:
+  Url: "mongodb://root:easy-chat@192.168.117.24:47017"
+  Db: easy-chat
+
+MsgChatTransfer:
+  Topic: msgChatTransfer
+  Addrs:
+    - 192.168.117.24:9092
+
+MsgReadTransfer:
+  Topic: msgReadTransfer
+  Addrs:
+    - 192.168.117.24:9092
