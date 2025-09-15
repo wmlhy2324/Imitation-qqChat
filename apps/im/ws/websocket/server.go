@@ -128,7 +128,7 @@ func (s *Server) handlerConn(conn *Conn) {
 	if s.isAck(nil) {
 		go s.readAck(conn)
 	}
-
+	// 读取消息
 	for {
 		// 获取请求消息
 		_, msg, err := conn.ReadMessage()
