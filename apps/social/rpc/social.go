@@ -25,8 +25,8 @@ func main() {
 
 	var c config.Config
 	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "192.168.117.24:3379",
-		ProjectKey:     "2f5bb7747efda0546636fb385a3fa593",
+		ETCDEndpoints:  "127.0.0.1:3379",
+		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
 		Namespace:      "social",
 		Configs:        "social-rpc.yaml",
 		ConfigFilePath: "./etc/conf",

@@ -49,7 +49,7 @@ services:
       easy-chat:
 
   mongo:
-    image: mongo:4.0
+    image: mongo:6.0
     container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root

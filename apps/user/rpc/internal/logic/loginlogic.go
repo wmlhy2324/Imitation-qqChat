@@ -46,7 +46,7 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	l.Infof("步骤1: 正在根据手机号查询用户信息...")
 	userEntity, err := l.svcCtx.UsersModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil {
-		if err == models.ErrNotFound {
+		if errors.Is(err, models.ErrNotFound) {
 			l.Errorf("用户不存在: 手机号 %s 未注册", in.Phone)
 			return nil, errors.WithStack(ErrPhoneNotRegister)
 		}

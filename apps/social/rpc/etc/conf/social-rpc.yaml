@@ -1,13 +1,12 @@
 cache:
-    - host: 192.168.117.24:16379
+    - host: 127.0.0.1:16379
       pass: easy-chat
       type: node
 etcd:
     hosts:
-        - 192.168.117.24:3379
+        - 127.0.0.1:3379
     key: social.rpc
-listenon: 0.0.0.0:10001
+listenon: 127.0.0.1:10001
 mysql:
-    datasource: root:easy-chat@tcp(192.168.117.24:13306)/easy-chat?charset=utf8mb4&parseTime=true
+    datasource: root:easy-chat@tcp(127.0.0.1:13306)/easy-chat?charset=utf8mb4&parseTime=true
 name: social.rpc
-timeout: 1000

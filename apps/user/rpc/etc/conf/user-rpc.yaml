@@ -9,7 +9,7 @@ etcd:
 jwt:
     accessexpire: 8640000
     accesssecret: imooc.com
-listenon: 0.0.0.0:12345
+listenon: 127.0.0.1:12345
 mysql:
     datasource: root:easy-chat@tcp(127.0.0.1:13306)/easy-chat?charset=utf8mb4
 name: user.rpc
