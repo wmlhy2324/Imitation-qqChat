@@ -134,7 +134,7 @@ echo -e "         开始启动 RPC 服务"
 echo -e "=========================================${NC}"
 
 # 1. 启动 User RPC 服务
-start_service "User RPC" "apps/user/rpc" "user.go" "user-rpc.log" "12345" 8
+start_service "User RPC" "apps/user/rpc" "user.go" "user-rpc.log" "10010" 8
 
 # 2. 启动 Social RPC 服务
 start_service "Social RPC" "apps/social/rpc" "social.go" "social-rpc.log" "10001" 8
@@ -162,7 +162,7 @@ echo -e "          所有服务启动完成！"
 echo -e "=========================================${NC}"
 
 echo -e "${BLUE}服务状态:${NC}"
-echo -e "  • User RPC:   http://localhost:12345"
+echo -e "  • User RPC:   http://localhost:10010"
 echo -e "  • Social RPC: http://localhost:10001" 
 echo -e "  • IM RPC:     http://localhost:10002"
 echo -e "  • User API:   http://localhost:8888"

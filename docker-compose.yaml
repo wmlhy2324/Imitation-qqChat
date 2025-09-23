@@ -35,7 +35,7 @@ services:
     command: redis-server --requirepass easy-chat --appendonly yes
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     ports:
       - 13306:3306
     container_name: mysql

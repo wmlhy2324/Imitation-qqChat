@@ -3,11 +3,13 @@ package logic
 import (
 	"context"
 	"database/sql"
+	//	"errors"
+	"time"
+
 	"github.com/pkg/errors"
 	"imooc.com/easy-chat/apps/social/socialmodels"
 	"imooc.com/easy-chat/pkg/constants"
 	"imooc.com/easy-chat/pkg/xerr"
-	"time"
 
 	"imooc.com/easy-chat/apps/social/rpc/internal/svc"
 	"imooc.com/easy-chat/apps/social/rpc/social"
@@ -34,7 +36,7 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 
 	// 申请人是否与目标是好友关系
 	friends, err := l.svcCtx.FriendsModel.FindByUidAndFid(l.ctx, in.UserId, in.ReqUid)
-	if err != nil && err != socialmodels.ErrNotFound {
+	if err != nil && !errors.Is(err, socialmodels.ErrNotFound) {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find friends by uid and fid err %v req %v ", err, in)
 	}
 	if friends != nil {
@@ -43,7 +45,7 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 
 	// 是否已经有过申请，申请是不成功，没有完成
 	friendReqs, err := l.svcCtx.FriendRequestsModel.FindByReqUidAndUserId(l.ctx, in.ReqUid, in.UserId)
-	if err != nil && err != socialmodels.ErrNotFound {
+	if err != nil && !errors.Is(err, socialmodels.ErrNotFound) {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find friendsRequest by rid and uid err %v req %v ", err, in)
 	}
 	if friendReqs != nil {
@@ -58,7 +60,7 @@ func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.Frien
 			Valid:  true,
 			String: in.ReqMsg,
 		},
-		ReqTime: time.Unix(in.ReqTime, 0),
+		ReqTime: time.UnixMilli(in.ReqTime),
 		HandleResult: sql.NullInt64{
 			Int64: int64(constants.NoHandlerResult),
 			Valid: true,

@@ -57,9 +57,9 @@ func main() {
 	wg.Add(1)
 	go func(c config.Config) {
 		defer wg.Done()
-		fmt.Println("-----------1", c)
+
 		Run(c)
-		fmt.Println("-----------2", c)
+
 	}(c)
 
 	wg.Wait()

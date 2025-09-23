@@ -44,7 +44,7 @@ stop_service "8881" "Social API"
 stop_service "8888" "User API"
 stop_service "10002" "IM RPC"
 stop_service "10001" "Social RPC"
-stop_service "12345" "User RPC"
+stop_service "10010" "User RPC"
 
 # 额外清理：杀死所有相关的 go run 进程
 echo -e "${YELLOW}清理相关进程...${NC}"
