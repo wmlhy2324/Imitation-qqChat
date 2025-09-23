@@ -2,7 +2,7 @@ host: 0.0.0.0
 imrpc:
     etcd:
         hosts:
-            - 192.168.117.24:3379
+            - 127.0.0.1:3379
         key: im.rpc
 jwtauth:
     accesssecret: imooc.com
@@ -11,10 +11,10 @@ port: 8882
 socialrpc:
     etcd:
         hosts:
-            - 192.168.117.24:3379
+            - 127.0.0.1:3379
         key: social.rpc
 userrpc:
     etcd:
         hosts:
-            - 192.168.117.24:3379
+            - 127.0.0.1:3379
         key: user.rpc
