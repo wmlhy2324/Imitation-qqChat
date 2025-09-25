@@ -8,28 +8,28 @@ info (
 // ------- domain.api --------------------
 type (
 	ChatLog {
-		Id             string `json:"id,omitempty"`
-		ConversationId string `json:"conversationId,omitempty"`
-		SendId         string `json:"sendId,omitempty"`
-		RecvId         string `json:"recvId,omitempty"`
-		MsgType        int32  `json:"msgType,omitempty"`
-		MsgContent     string `json:"msgContent,omitempty"`
-		ChatType       int32  `json:"chatType,omitempty"`
-		SendTime       int64  `json:"SendTime,omitempty"`
+		Id             string `json:"id"`
+		ConversationId string `json:"conversationId"`
+		SendId         string `json:"sendId"`
+		RecvId         string `json:"recvId"`
+		MsgType        int32  `json:"msgType"`
+		MsgContent     string `json:"msgContent"`
+		ChatType       int32  `json:"chatType"`
+		SendTime       int64  `json:"SendTime"`
 	}
 	Conversation {
-		ConversationId string `json:"conversationId,omitempty"`
-		ChatType       int32  `json:"ChatType,omitempty"`
-		TargetId       string `json:"targetId,omitempty"`
-		IsShow         bool   `json:"isShow,omitempty"`
-		Seq            int64  `json:"seq,omitempty"`
-		Read           int32  `json:"read,omitempty"`
-		Total          int32  `json:"total,omitempty"`
-		Unread         int32  `json:"unread,omitempty"`
+		ConversationId string `json:"conversationId"`
+		ChatType       int32  `json:"ChatType"`
+		TargetId       string `json:"targetId"`
+		IsShow         bool   `json:"isShow"`
+		Seq            int64  `json:"seq"`
+		Read           int32  `json:"read"`
+		Total          int32  `json:"total"`
+		Unread         int32  `json:"unread"`
 		// 扩展字段 - 用于前端显示
-		Name        string `json:"name,omitempty"` // 会话名称（好友昵称或群名称）
-		Avatar      string `json:"avatar,omitempty"` // 会话头像（好友头像或群头像）
-		MemberCount int32  `json:"memberCount,omitempty"` // 群成员数量（仅群聊时有效）
+		Name        string `json:"name"` // 会话名称（好友昵称或群名称）
+		Avatar      string `json:"avatar"` // 会话头像（好友头像或群头像）
+		MemberCount int32  `json:"memberCount"` // 群成员数量（仅群聊时有效）
 	}
 )
 
