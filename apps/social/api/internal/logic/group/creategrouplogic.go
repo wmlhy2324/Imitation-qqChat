@@ -2,6 +2,7 @@ package group
 
 import (
 	"context"
+
 	"imooc.com/easy-chat/apps/im/rpc/imclient"
 	"imooc.com/easy-chat/apps/social/rpc/socialclient"
 	"imooc.com/easy-chat/pkg/ctxdata"
@@ -27,14 +28,15 @@ func NewCreateGroupLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Creat
 }
 
 func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.GroupCreateResp, err error) {
-	// todo: add your logic here and delete this line
 	uid := ctxdata.GetUId(l.ctx)
 
 	// 创建群
 	res, err := l.svcCtx.Social.GroupCreate(l.ctx, &socialclient.GroupCreateReq{
-		Name:       req.Name,
-		Icon:       req.Icon,
-		CreatorUid: uid,
+		Name:        req.Name,
+		Icon:        req.Icon,
+		CreatorUid:  uid,
+		Description: req.Description,
+		MemberIds:   req.MemberIds,
 	})
 	if err != nil {
 		return nil, err
@@ -50,5 +52,5 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.G
 		CreateId: uid,
 	})
 
-	return nil, err
+	return &types.GroupCreateResp{}, err
 }

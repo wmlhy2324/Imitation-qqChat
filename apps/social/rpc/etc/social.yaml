@@ -1,6 +1,20 @@
 Name: social.rpc
-ListenOn: 127.0.0.1:8080
+ListenOn: 127.0.0.1:10001
 Etcd:
   Hosts:
   - 127.0.0.1:2379
   Key: social.rpc
+
+# MySQL配置
+Mysql:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/easy_chat_social?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+# Redis缓存配置
+Cache:
+  - Host: 127.0.0.1:6379
+    Pass: ""
+    Type: node
+
+UserRpc:
+  Endpoints:
+    - 127.0.0.1:10000  # user RPC服务的直连地址

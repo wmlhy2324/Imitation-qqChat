@@ -13,4 +13,7 @@ type Config struct {
 	}
 
 	Cache cache.CacheConf
+
+	// RPC客户端配置
+	UserRpc zrpc.RpcClientConf
 }

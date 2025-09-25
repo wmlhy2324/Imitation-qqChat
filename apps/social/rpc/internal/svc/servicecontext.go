@@ -2,8 +2,10 @@ package svc
 
 import (
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"github.com/zeromicro/go-zero/zrpc"
 	"imooc.com/easy-chat/apps/social/rpc/internal/config"
 	"imooc.com/easy-chat/apps/social/socialmodels"
+	"imooc.com/easy-chat/apps/user/rpc/userclient"
 )
 
 type ServiceContext struct {
@@ -14,6 +16,9 @@ type ServiceContext struct {
 	socialmodels.GroupsModel
 	socialmodels.GroupRequestsModel
 	socialmodels.GroupMembersModel
+
+	// RPC客户端
+	UserRpc userclient.User
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -28,5 +33,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		GroupsModel:         socialmodels.NewGroupsModel(sqlConn, c.Cache),
 		GroupRequestsModel:  socialmodels.NewGroupRequestsModel(sqlConn, c.Cache),
 		GroupMembersModel:   socialmodels.NewGroupMembersModel(sqlConn, c.Cache),
+
+		// 初始化RPC客户端
+		UserRpc: userclient.NewUser(zrpc.MustNewClient(c.UserRpc)),
 	}
 }

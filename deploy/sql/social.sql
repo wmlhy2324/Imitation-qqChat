@@ -30,6 +30,7 @@ CREATE TABLE `groups` (
   `is_verify` boolean NOT NULL ,
   `notification` varchar(255) DEFAULT NULL,
   `notification_uid` varchar(64) DEFAULT NULL,
+  `description` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)

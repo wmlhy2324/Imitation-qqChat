@@ -89,8 +89,10 @@ type (
 
 type (
 	GroupCreateReq {
-		Name string `json:"name,omitempty"`
-		Icon string `json:"icon,omitempty"`
+		Name        string   `json:"name,omitempty"`
+		Icon        string   `json:"icon,omitempty"`
+		Description string   `json:"description,omitempty"`
+		MemberIds   []string `json:"memberIds,omitempty"`
 	}
 	GroupCreateResp  {}
 )
@@ -170,6 +172,31 @@ type (
 	}
 )
 
+type (
+	FriendAndGroupSearchReq {
+		Keyword string `form:"keyword"` // 搜索关键词
+	}
+	FriendAndGroupSearchResp {
+		FriendList []*SearchFriendInfo `json:"friendList"` // 好友搜索结果
+		GroupList  []*SearchGroupInfo  `json:"groupList"` // 群聊搜索结果
+	}
+	SearchFriendInfo {
+		Id       string `json:"id"` // 用户ID
+		Nickname string `json:"nickname"` // 昵称
+		Avatar   string `json:"avatar"` // 头像
+		Phone    string `json:"phone"` // 手机号
+		Remark   string `json:"remark"` // 好友备注
+	}
+	SearchGroupInfo {
+		Id           string `json:"id"` // 群ID
+		Name         string `json:"name"` // 群名称
+		Icon         string `json:"icon"` // 群头像
+		MemberCount  int32  `json:"memberCount"` // 成员数量
+		Notification string `json:"notification"` // 群公告
+		IsJoined     bool   `json:"isJoined"` // 当前用户是否已加入
+	}
+)
+
 @server (
 	prefix: v1/social
 	group:  friend
@@ -199,6 +226,10 @@ service social {
 	@doc "搜索用户"
 	@handler userSearch
 	get /user/search (UserSearchReq) returns (UserSearchResp)
+
+	@doc "搜索好友和群聊"
+	@handler friendAndGroupSearch
+	get /search (FriendAndGroupSearchReq) returns (FriendAndGroupSearchResp)
 }
 
 @server (

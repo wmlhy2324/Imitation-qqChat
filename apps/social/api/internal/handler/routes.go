@@ -45,6 +45,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: friend.FriendsOnlineHandler(serverCtx),
 			},
 			{
+				// 搜索好友和群聊
+				Method:  http.MethodGet,
+				Path:    "/search",
+				Handler: friend.FriendAndGroupSearchHandler(serverCtx),
+			},
+			{
 				// 搜索用户
 				Method:  http.MethodGet,
 				Path:    "/user/search",

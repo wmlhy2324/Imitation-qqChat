@@ -10,3 +10,8 @@ listenon: 127.0.0.1:10001
 mysql:
     datasource: root:easy-chat@tcp(127.0.0.1:13306)/easy-chat?charset=utf8mb4&parseTime=true
 name: social.rpc
+userrpc:
+    etcd:
+        hosts:
+            - 127.0.0.1:3379
+        key: user.rpc

@@ -48,6 +48,7 @@ type (
 		IsVerify        bool           `db:"is_verify"`
 		Notification    sql.NullString `db:"notification"`
 		NotificationUid sql.NullString `db:"notification_uid"`
+		Description     string         `db:"description"`
 		CreatedAt       sql.NullTime   `db:"created_at"`
 		UpdatedAt       sql.NullTime   `db:"updated_at"`
 	}
@@ -95,8 +96,8 @@ func (m *defaultGroupsModel) FindOne(ctx context.Context, id string) (*Groups, e
 func (m *defaultGroupsModel) Insert(ctx context.Context, session sqlx.Session, data *Groups) (sql.Result, error) {
 	groupsIdKey := fmt.Sprintf("%s%v", cacheGroupsIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, groupsRowsExpectAutoSet)
-		return session.ExecCtx(ctx, query, data.Id, data.Name, data.Icon, data.Status, data.CreatorUid, data.GroupType, data.IsVerify, data.Notification, data.NotificationUid, data.CreatedAt, data.UpdatedAt)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, groupsRowsExpectAutoSet)
+		return session.ExecCtx(ctx, query, data.Id, data.Name, data.Icon, data.Status, data.CreatorUid, data.GroupType, data.IsVerify, data.Notification, data.NotificationUid, data.Description, data.CreatedAt, data.UpdatedAt)
 	}, groupsIdKey)
 	return ret, err
 }
