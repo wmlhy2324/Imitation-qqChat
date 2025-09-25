@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -79,7 +80,7 @@ func (l *SetUpUserConversationLogic) setUpUserConversation(conversationId, userI
 	// 用户的会话列表
 	conversations, err := l.svcCtx.ConversationsModel.FindByUserId(l.ctx, userId)
 	if err != nil {
-		if err == immodels.ErrNotFound {
+		if errors.Is(err, immodels.ErrNotFound) {
 			conversations = &immodels.Conversations{
 				ID:               primitive.NewObjectID(),
 				UserId:           userId,

@@ -22,7 +22,7 @@ type Conversation struct {
 	ChatType constants.ChatType `bson:"chatType,omitempty"`
 
 	// 目标ID（已注释，可能用于存储对方用户ID或群组ID）
-	//TargetId string `bson:"targetId,omitempty"`
+	TargetId string `bson:"targetId,omitempty"`
 
 	// 是否在会话列表中显示此会话，true=显示，false=隐藏
 	IsShow bool `bson:"isShow,omitempty"`
