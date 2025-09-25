@@ -28,9 +28,13 @@ message Conversation {
   int32 total = 6;
   // 未读消息数
   int32 toRead = 7;
+  ChatLog msg = 8;
   // 已读消息
   int32 Read = 9;
-  ChatLog msg = 8;
+  // 扩展字段 - 用于前端显示
+  string name = 10;        // 会话名称（好友昵称或群名称）
+  string avatar = 11;      // 会话头像（好友头像或群头像）
+  int32 memberCount = 12;  // 群成员数量（仅群聊时有效）
 }
 
 // ------------ req resp ---------------

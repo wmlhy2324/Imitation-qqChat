@@ -12,26 +12,6 @@ type ChatLog struct {
 	SendTime       int64  `json:"SendTime,omitempty"`
 }
 
-type Conversation struct {
-	ConversationId string `json:"conversationId,omitempty"`
-	ChatType       int32  `json:"ChatType,omitempty"`
-	TargetId       string `json:"targetId,omitempty"`
-	IsShow         bool   `json:"isShow,omitempty"`
-	Seq            int64  `json:"seq,omitempty"`
-	Read           int32  `json:"read,omitempty"`
-	Total          int32  `json:"total,omitempty"`
-	Unread         int32  `json:"unread,omitempty"`
-}
-
-type GetChatLogReadRecordsReq struct {
-	MsgId string `json:"msgId"`
-}
-
-type GetChatLogReadRecordsResp struct {
-	Reads   []string `json:"reads"`
-	UnReads []string `json:"unReads"`
-}
-
 type ChatLogReq struct {
 	ConversationId string `json:"conversationId"`
 	StartSendTime  int64  `json:"startSendTime,omitempty"`
@@ -41,6 +21,29 @@ type ChatLogReq struct {
 
 type ChatLogResp struct {
 	List []*ChatLog `json:"list"`
+}
+
+type Conversation struct {
+	ConversationId string `json:"conversationId,omitempty"`
+	ChatType       int32  `json:"ChatType,omitempty"`
+	TargetId       string `json:"targetId,omitempty"`
+	IsShow         bool   `json:"isShow,omitempty"`
+	Seq            int64  `json:"seq,omitempty"`
+	Read           int32  `json:"read,omitempty"`
+	Total          int32  `json:"total,omitempty"`
+	Unread         int32  `json:"unread,omitempty"`
+	Name           string `json:"name,omitempty"`        // 会话名称（好友昵称或群名称）
+	Avatar         string `json:"avatar,omitempty"`      // 会话头像（好友头像或群头像）
+	MemberCount    int32  `json:"memberCount,omitempty"` // 群成员数量（仅群聊时有效）
+}
+
+type GetChatLogReadRecordsReq struct {
+	MsgId string `json:"msgId"`
+}
+
+type GetChatLogReadRecordsResp struct {
+	Reads   []string `json:"reads"`
+	UnReads []string `json:"unReads"`
 }
 
 type GetConversationsReq struct {

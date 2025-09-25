@@ -25,24 +25,28 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 根据用户获取聊天记录
 				Method:  http.MethodGet,
 				Path:    "/chatlog",
 				Handler: getChatLogHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
-				Path:    "/setup/conversation",
-				Handler: setUpUserConversationHandler(serverCtx),
-			},
-			{
+				// 获取会话
 				Method:  http.MethodGet,
 				Path:    "/conversation",
 				Handler: getConversationsHandler(serverCtx),
 			},
 			{
+				// 更新会话
 				Method:  http.MethodPut,
 				Path:    "/conversation",
 				Handler: putConversationsHandler(serverCtx),
+			},
+			{
+				// 建立会话
+				Method:  http.MethodPost,
+				Path:    "/setup/conversation",
+				Handler: setUpUserConversationHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
