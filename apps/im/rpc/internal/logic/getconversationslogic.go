@@ -39,6 +39,7 @@ func (l *GetConversationsLogic) GetConversations(in *im.GetConversationsReq) (*i
 		}
 		return nil, errors.Wrapf(xerr.NewDBErr(), "ConversationsModel.FindByUserId err %v, req %v", err, in.UserId)
 	}
+
 	var res im.GetConversationsResp
 	copier.Copy(&res, &data)
 

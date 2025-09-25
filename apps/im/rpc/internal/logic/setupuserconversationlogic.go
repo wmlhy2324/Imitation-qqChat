@@ -44,6 +44,7 @@ func (l *SetUpUserConversationLogic) SetUpUserConversation(in *im.SetUpUserConve
 			if errors.Is(err, immodels.ErrNotFound) {
 				err = l.svcCtx.ConversationModel.Insert(l.ctx, &immodels.Conversation{
 					ConversationId: conversationId,
+					TargetId:       in.RecvId,
 					ChatType:       constants.SingleChatType,
 				})
 
@@ -99,6 +100,7 @@ func (l *SetUpUserConversationLogic) setUpUserConversation(conversationId, userI
 	// 添加会话记录
 	conversations.ConversationList[conversationId] = &immodels.Conversation{
 		ConversationId: conversationId,
+		TargetId:       recvId,
 		ChatType:       constants.SingleChatType,
 		IsShow:         isShow,
 	}
