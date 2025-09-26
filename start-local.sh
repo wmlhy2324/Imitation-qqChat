@@ -128,6 +128,11 @@ if ! nc -z 127.0.0.1 47017 2>/dev/null; then
     echo -e "${YELLOW}警告: MongoDB 服务 (127.0.0.1:47017) 未启动，IM 服务可能无法正常工作${NC}"
 fi
 
+# 检查 Kafka (消息队列服务需要)
+if ! nc -z 127.0.0.1 9092 2>/dev/null; then
+    echo -e "${YELLOW}警告: Kafka 服务 (127.0.0.1:9092) 未启动，消息队列可能无法正常工作${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}========================================="
 echo -e "         开始启动 RPC 服务"
@@ -158,16 +163,34 @@ start_service "IM API" "apps/im/api" "im.go" "im-api.log" "8882" 6
 
 echo ""
 echo -e "${GREEN}========================================="
+echo -e "         开始启动 WebSocket 服务"
+echo -e "=========================================${NC}"
+
+# 7. 启动 IM WebSocket 服务
+start_service "IM WebSocket" "apps/im/ws" "im.go" "im-ws.log" "10090" 8
+
+echo ""
+echo -e "${GREEN}========================================="
+echo -e "         开始启动 消息队列 服务"
+echo -e "=========================================${NC}"
+
+# 8. 启动 Task MQ 服务
+start_service "Task MQ" "apps/task/mq" "mq.go" "task-mq.log" "9001" 6
+
+echo ""
+echo -e "${GREEN}========================================="
 echo -e "          所有服务启动完成！"
 echo -e "=========================================${NC}"
 
 echo -e "${BLUE}服务状态:${NC}"
-echo -e "  • User RPC:   http://localhost:10010"
-echo -e "  • Social RPC: http://localhost:10001" 
-echo -e "  • IM RPC:     http://localhost:10002"
-echo -e "  • User API:   http://localhost:8888"
-echo -e "  • Social API: http://localhost:8881"
-echo -e "  • IM API:     http://localhost:8882"
+echo -e "  • User RPC:     http://localhost:10010"
+echo -e "  • Social RPC:   http://localhost:10001" 
+echo -e "  • IM RPC:       http://localhost:10002"
+echo -e "  • User API:     http://localhost:8888"
+echo -e "  • Social API:   http://localhost:8881"
+echo -e "  • IM API:       http://localhost:8882"
+echo -e "  • IM WebSocket: ws://localhost:10090/ws"
+echo -e "  • Task MQ:      http://localhost:9001"
 
 echo ""
 echo -e "${BLUE}日志文件位置: $LOG_DIR/${NC}"

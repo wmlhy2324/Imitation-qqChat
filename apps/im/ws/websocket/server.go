@@ -9,8 +9,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/threading"
 	"time"
+
+	"github.com/zeromicro/go-zero/core/threading"
 
 	"net/http"
 	"sync"
@@ -73,6 +74,7 @@ func NewServer(addr string, opts ...ServerOptions) *Server {
 		},
 
 		authentication: opt.Authentication,
+		discover:       opt.discover,
 
 		connToUser: make(map[*Conn]string),
 		userToConn: make(map[string]*Conn),
@@ -83,7 +85,7 @@ func NewServer(addr string, opts ...ServerOptions) *Server {
 	}
 
 	// 存在服务发现，采用分布式im通信的时候; 默认不做任何处理
-	s.discover.Register(fmt.Sprintf("%s", s.listenOn))
+	s.discover.Register(s.listenOn)
 
 	return s
 }
@@ -102,7 +104,7 @@ func (s *Server) ServerWs(w http.ResponseWriter, r *http.Request) {
 
 	if !s.authentication.Auth(w, r) {
 		//conn.WriteMessage(websocket.TextMessage, []byte(fmt.Sprint("不具备访问权限")))
-		s.Send(&Message{FrameType: FrameData, Data: fmt.Sprint("不具备访问权限")}, conn)
+		s.Send(&Message{FrameType: FrameData, Data: "不具备访问权限"}, conn)
 		conn.Close()
 		return
 	}

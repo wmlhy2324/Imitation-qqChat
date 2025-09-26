@@ -39,6 +39,8 @@ stop_service() {
 # 按相反顺序停止服务
 echo "按服务启动的相反顺序停止..."
 
+stop_service "9001" "Task MQ"
+stop_service "10090" "IM WebSocket"
 stop_service "8882" "IM API"
 stop_service "8881" "Social API"  
 stop_service "8888" "User API"

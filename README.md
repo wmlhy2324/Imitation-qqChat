@@ -223,6 +223,114 @@ CREATE TABLE `users` (
 - `MONGO_INITDB_ROOT_USERNAME`: MongoDB用户名 (默认: root)  
 - `MONGO_INITDB_ROOT_PASSWORD`: MongoDB密码 (默认: easy-chat)
 
+### WebSocket服务发现配置
+
+WebSocket服务支持分布式部署，通过 `WithServerDiscover` 配置服务发现机制，实现多服务器集群下的消息路由和负载均衡。
+
+#### 服务发现的作用
+
+1. **多服务实例管理**: 当有多个IM服务器运行时，自动注册和发现服务实例
+2. **用户-服务绑定**: 记录每个用户连接到哪个服务器，用于消息路由
+3. **消息跨服务转发**: 实现不同服务器间的消息转发
+
+#### 配置示例
+
+**单机部署 (不需要服务发现)**:
+```go
+// 在 apps/im/ws/im.go 中
+opts := []websocket.ServerOptions{
+    websocket.WithServerAuthentication(handler.NewJwtAuth(ctx)),
+    // 不设置 WithServerDiscover，使用默认的空实现
+}
+srv := websocket.NewServer(c.ListenOn, opts...)
+```
+
+**集群部署 (Redis服务发现)**:
+```go
+// 在 apps/im/ws/im.go 中
+opts := []websocket.ServerOptions{
+    websocket.WithServerAuthentication(handler.NewJwtAuth(ctx)),
+    websocket.WithServerDiscover(websocket.NewRedisDiscover(
+        http.Header{
+            "Authorization": []string{token}, // 服务间通信认证
+        },
+        constants.REDIS_DISCOVER_SRV, // Redis key前缀: "easy-im-srv"
+        c.Redisx,                     // Redis连接配置
+    )),
+}
+srv := websocket.NewServer(c.ListenOn, opts...)
+```
+
+**配置文件 (apps/im/ws/etc/dev/im.yaml)**:
+```yaml
+Name: im.ws
+ListenOn: 0.0.0.0:10090  # 当前服务器监听地址
+
+# Redis配置 - 用于服务发现
+redisx:
+  host: 127.0.0.1:16379
+  pass: easy-im
+
+# JWT配置 - 用于服务间认证
+JwtAuth:
+  AccessSecret: imooc.com
+```
+
+#### 工作原理
+
+1. **服务注册**: 每个WebSocket服务启动时，自动将自己的地址注册到Redis
+2. **用户绑定**: 用户连接时，记录用户ID与服务器地址的映射关系
+3. **消息路由**: 发送消息时，查询目标用户所在服务器，建立连接并转发消息
+4. **故障恢复**: 服务器下线时，自动清理相关绑定关系
+
+#### Redis存储结构
+
+```bash
+# 服务列表
+easy-im-srv -> "192.168.1.100:10090"
+
+# 用户绑定关系 (Hash结构)
+easy-im-srv.boundUserKey -> {
+    "user123": "192.168.1.100:10090",
+    "user456": "192.168.1.101:10090"
+}
+```
+
+#### 自定义服务发现
+
+如需实现自定义服务发现机制，可实现 `Discover` 接口：
+
+```go
+type CustomDiscover struct {
+    // 自定义字段
+}
+
+func (d *CustomDiscover) Register(serverAddr string) error {
+    // 服务注册逻辑
+    return nil
+}
+
+func (d *CustomDiscover) BoundUser(uid string) error {
+    // 用户绑定逻辑
+    return nil
+}
+
+func (d *CustomDiscover) RelieveUser(uid string) error {
+    // 用户解绑逻辑
+    return nil
+}
+
+func (d *CustomDiscover) Transpond(msg interface{}, uid ...string) error {
+    // 消息转发逻辑
+    return nil
+}
+
+// 使用自定义实现
+opts := []websocket.ServerOptions{
+    websocket.WithServerDiscover(&CustomDiscover{}),
+}
+```
+
 ### Kafka主题配置
 - `ws2ms_chat`: WebSocket到微服务的消息
 - `ms2ps_chat`: 微服务到推送服务的消息  

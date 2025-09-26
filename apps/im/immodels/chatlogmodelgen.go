@@ -126,16 +126,25 @@ func (m *defaultChatLogModel) ListBySendTime(ctx context.Context, conversationId
 		"conversationId": conversationId,
 	}
 
-	if endSendTime > 0 {
+	// 假设 0 表示未设置时间
+	if startSendTime > 0 && endSendTime > 0 {
+		// 两个时间都设置了，查询 (endSendTime, startSendTime] 区间
 		filter["sendTime"] = bson.M{
 			"$gt":  endSendTime,
 			"$lte": startSendTime,
 		}
-	} else {
+	} else if startSendTime > 0 {
+		// 只设置了 startSendTime，查询早于 startSendTime 的记录
 		filter["sendTime"] = bson.M{
 			"$lt": startSendTime,
 		}
+	} else if endSendTime > 0 {
+		// 只设置了 endSendTime，查询晚于 endSendTime 的记录
+		filter["sendTime"] = bson.M{
+			"$gt": endSendTime,
+		}
 	}
+	// else: 两个都是 0，不添加时间过滤条件，查询所有
 	err := m.conn.Find(ctx, &data, filter, &opt)
 	switch err {
 	case nil:

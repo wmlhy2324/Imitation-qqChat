@@ -30,6 +30,7 @@ func newServerOptions(opts ...ServerOptions) serverOption {
 		ackTimeout:        defaultAckTimeout,
 		patten:            "/ws",
 		concurrency:       defaultConcurrency,
+		discover:          &nopDiscover{}, // 设置默认的空实现，防止nil指针异常
 	}
 
 	for _, opt := range opts {

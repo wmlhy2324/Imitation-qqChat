@@ -3,13 +3,16 @@ jwtauth:
 listenon: 0.0.0.0:10090
 mongo:
     db: easy-chat
-    url: mongodb://root:easy-chat@192.168.117.24:47017
+    url: mongodb://root:easy-chat@127.0.0.1:47017
 msgchattransfer:
     addrs:
-        - 192.168.117.24:9092
+        - 127.0.0.1:9092
     topic: msgChatTransfer
 msgreadtransfer:
     addrs:
-        - 192.168.117.24:9092
+        - 127.0.0.1:9092
     topic: msgReadTransfer
 name: im.ws
+redisx:
+    host: 127.0.0.1:16379
+    pass: easy-im

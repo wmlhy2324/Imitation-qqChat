@@ -101,7 +101,7 @@ func (l *SetUpUserConversationLogic) setUpUserConversation(conversationId, userI
 	conversations.ConversationList[conversationId] = &immodels.Conversation{
 		ConversationId: conversationId,
 		TargetId:       recvId,
-		ChatType:       constants.SingleChatType,
+		ChatType:       chatType,
 		IsShow:         isShow,
 	}
 
