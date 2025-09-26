@@ -175,7 +175,7 @@ echo -e "         开始启动 消息队列 服务"
 echo -e "=========================================${NC}"
 
 # 8. 启动 Task MQ 服务
-start_service "Task MQ" "apps/task/mq" "mq.go" "task-mq.log" "9001" 6
+start_service "Task MQ" "apps/task/mq" "task.go" "task-mq.log" "10091" 6
 
 echo ""
 echo -e "${GREEN}========================================="
@@ -190,7 +190,7 @@ echo -e "  • User API:     http://localhost:8888"
 echo -e "  • Social API:   http://localhost:8881"
 echo -e "  • IM API:       http://localhost:8882"
 echo -e "  • IM WebSocket: ws://localhost:10090/ws"
-echo -e "  • Task MQ:      http://localhost:9001"
+echo -e "  • Task MQ:      http://localhost:10091"
 
 echo ""
 echo -e "${BLUE}日志文件位置: $LOG_DIR/${NC}"
