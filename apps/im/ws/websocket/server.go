@@ -174,7 +174,7 @@ func (s *Server) readAck(conn *Conn) {
 		default:
 		}
 
-		// 从队列中读取新的消息
+		// 从队列(切片)中读取新的消息
 		conn.messageMu.Lock()
 		if len(conn.readMessage) == 0 {
 			conn.messageMu.Unlock()

@@ -31,6 +31,7 @@ func newServerOptions(opts ...ServerOptions) serverOption {
 		patten:            "/ws",
 		concurrency:       defaultConcurrency,
 		discover:          &nopDiscover{}, // 设置默认的空实现，防止nil指针异常
+		ack:               NoAck,
 	}
 
 	for _, opt := range opts {
