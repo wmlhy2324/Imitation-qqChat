@@ -150,7 +150,7 @@ type GroupRequests struct {
 }
 
 type GroupUserListReq struct {
-	GroupId string `json:"group_id,omitempty"`
+	GroupId string `form:"group_id,omitempty"`
 }
 
 type GroupUserListResp struct {
@@ -158,7 +158,7 @@ type GroupUserListResp struct {
 }
 
 type GroupUserOnlineReq struct {
-	GroupId string `json:"group_id,omitempty"`
+	GroupId string `form:"group_id,omitempty"`
 }
 
 type GroupUserOnlineResp struct {

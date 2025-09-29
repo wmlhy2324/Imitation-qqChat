@@ -37,7 +37,7 @@ func (l *SetUpUserConversationLogic) SetUpUserConversation(in *im.SetUpUserConve
 	case constants.SingleChatType:
 		// 生成会话的id
 		conversationId := wuid.CombineId(in.SendId, in.RecvId)
-		// 验证是否建立过会话
+		// 验证是否建立过会话,todo 条件加上targetId
 		conversationRes, err := l.svcCtx.ConversationModel.FindOne(l.ctx, conversationId)
 		if err != nil {
 			// 建立会话

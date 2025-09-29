@@ -134,7 +134,7 @@ type (
 
 type (
 	GroupUserListReq {
-		GroupId string `json:"group_id,omitempty"`
+		GroupId string `form:"group_id,omitempty"`
 	}
 	GroupUserListResp {
 		List []*GroupMembers `json:"List,omitempty"`
@@ -181,7 +181,7 @@ type (
 
 type (
 	GroupUserOnlineReq {
-		GroupId string `json:"group_id,omitempty"`
+		GroupId string `form:"group_id,omitempty"`
 	}
 	GroupUserOnlineResp {
 		OnlineList map[string]bool `json:"onLineList"`
