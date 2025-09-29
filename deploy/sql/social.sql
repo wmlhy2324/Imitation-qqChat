@@ -4,6 +4,7 @@ CREATE TABLE `friends` (
    `friend_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
    `remark` varchar(255) DEFAULT NULL,
    `add_source`  tinyint COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+   `friend_type`  tinyint COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '好友类型:1=同事,2=同学,3=朋友,4=家人',
    `created_at` timestamp NULL DEFAULT NULL,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
