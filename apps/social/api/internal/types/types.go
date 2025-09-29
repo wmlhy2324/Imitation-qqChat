@@ -10,6 +10,13 @@ type FriendAndGroupSearchResp struct {
 	GroupList  []*SearchGroupInfo  `json:"groupList"`  // 群聊搜索结果
 }
 
+type FriendDeleteReq struct {
+	FriendUid string `json:"friend_uid"` // 要删除的好友ID
+}
+
+type FriendDeleteResp struct {
+}
+
 type FriendListReq struct {
 }
 
@@ -49,6 +56,14 @@ type FriendRequests struct {
 	ReqTime      int64  `json:"req_time,omitempty"`
 	HandleResult int    `json:"handle_result,omitempty"`
 	HandleMsg    string `json:"handle_msg,omitempty"`
+}
+
+type FriendSearchReq struct {
+	Keyword string `form:"keyword"` // 搜索关键词（昵称、手机号、ID）
+}
+
+type FriendSearchResp struct {
+	List []*SearchFriendInfo `json:"list"`
 }
 
 type Friends struct {

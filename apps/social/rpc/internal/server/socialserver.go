@@ -42,6 +42,16 @@ func (s *SocialServer) FriendList(ctx context.Context, in *social.FriendListReq)
 	return l.FriendList(in)
 }
 
+func (s *SocialServer) FriendDelete(ctx context.Context, in *social.FriendDeleteReq) (*social.FriendDeleteResp, error) {
+	l := logic.NewFriendDeleteLogic(ctx, s.svcCtx)
+	return l.FriendDelete(in)
+}
+
+func (s *SocialServer) FriendSearch(ctx context.Context, in *social.FriendSearchReq) (*social.FriendSearchResp, error) {
+	l := logic.NewFriendSearchLogic(ctx, s.svcCtx)
+	return l.FriendSearch(in)
+}
+
 func (s *SocialServer) GroupCreate(ctx context.Context, in *social.GroupCreateReq) (*social.GroupCreateResp, error) {
 	l := logic.NewGroupCreateLogic(ctx, s.svcCtx)
 	return l.GroupCreate(in)

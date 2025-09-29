@@ -15,6 +15,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 删除好友
+				Method:  http.MethodDelete,
+				Path:    "/friend",
+				Handler: friend.FriendDeleteHandler(serverCtx),
+			},
+			{
 				// 好友申请
 				Method:  http.MethodPost,
 				Path:    "/friend/putIn",
@@ -31,6 +37,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/friend/putIns",
 				Handler: friend.FriendPutInListHandler(serverCtx),
+			},
+			{
+				// 搜索好友
+				Method:  http.MethodGet,
+				Path:    "/friend/search",
+				Handler: friend.FriendSearchHandler(serverCtx),
 			},
 			{
 				// 好友列表

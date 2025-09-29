@@ -149,6 +149,22 @@ type (
 )
 
 type (
+	FriendDeleteReq {
+		FriendUid string `json:"friend_uid"` // 要删除的好友ID
+	}
+	FriendDeleteResp  {}
+)
+
+type (
+	FriendSearchReq {
+		Keyword string `form:"keyword"` // 搜索关键词（昵称、手机号、ID）
+	}
+	FriendSearchResp {
+		List []*SearchFriendInfo `json:"list"`
+	}
+)
+
+type (
 	UserSearchReq {
 		Keyword string `form:"keyword"`
 	}
@@ -226,6 +242,14 @@ service social {
 	@doc "搜索用户"
 	@handler userSearch
 	get /user/search (UserSearchReq) returns (UserSearchResp)
+
+	@doc "删除好友"
+	@handler friendDelete
+	delete /friend (FriendDeleteReq) returns (FriendDeleteResp)
+
+	@doc "搜索好友"
+	@handler friendSearch
+	get /friend/search (FriendSearchReq) returns (FriendSearchResp)
 
 	@doc "搜索好友和群聊"
 	@handler friendAndGroupSearch

@@ -67,10 +67,13 @@ start_service() {
     
     echo -e "${BLUE}启动 $service_name...${NC}"
     
-    # 检查端口
-    if ! check_port "$port" "$service_name"; then
-        echo -e "${RED}端口 $port 被占用，请先停止占用该端口的进程${NC}"
-        exit 1
+    # Task MQ是消息队列服务，不需要检查端口
+    if [ "$service_name" != "Task MQ" ]; then
+        # 检查端口
+        if ! check_port "$port" "$service_name"; then
+            echo -e "${RED}端口 $port 被占用，请先停止占用该端口的进程${NC}"
+            exit 1
+        fi
     fi
     
     # 进入服务目录
@@ -85,9 +88,18 @@ start_service() {
     # 等待服务启动
     local count=0
     while [ $count -lt $wait_time ]; do
-        if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
-            echo -e "${GREEN}✓ $service_name 启动成功 (端口: $port)${NC}"
-            return 0
+        # Task MQ是消息队列服务，检测进程而不是端口
+        if [ "$service_name" = "Task MQ" ]; then
+            if ps -p $pid > /dev/null 2>&1; then
+                echo -e "${GREEN}✓ $service_name 启动成功 (消息队列服务)${NC}"
+                return 0
+            fi
+        else
+            # 其他服务检测端口监听
+            if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+                echo -e "${GREEN}✓ $service_name 启动成功 (端口: $port)${NC}"
+                return 0
+            fi
         fi
         sleep 1
         count=$((count + 1))
@@ -190,7 +202,7 @@ echo -e "  • User API:     http://localhost:8888"
 echo -e "  • Social API:   http://localhost:8881"
 echo -e "  • IM API:       http://localhost:8882"
 echo -e "  • IM WebSocket: ws://localhost:10090/ws"
-echo -e "  • Task MQ:      http://localhost:10091"
+echo -e "  • Task MQ:      消息队列服务 (Kafka消费者)"
 
 echo ""
 echo -e "${BLUE}日志文件位置: $LOG_DIR/${NC}"

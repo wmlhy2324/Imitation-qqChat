@@ -91,6 +91,22 @@ message FriendListResp{
   repeated Friends list = 1;
 }
 
+message FriendDeleteReq{
+  string userId = 1;
+  string friendUid = 2;
+}
+
+message FriendDeleteResp{}
+
+message FriendSearchReq{
+  string userId = 1;
+  string keyword = 2;
+}
+
+message FriendSearchResp{
+  repeated SearchFriendInfo list = 1;
+}
+
 // 群
 message GroupCreateReq {
   string name = 2;
@@ -187,6 +203,8 @@ service social {
   rpc FriendPutInHandle(FriendPutInHandleReq) returns(FriendPutInHandleResp);
   rpc FriendPutInList(FriendPutInListReq) returns(FriendPutInListResp);
   rpc FriendList(FriendListReq) returns (FriendListResp);
+  rpc FriendDelete(FriendDeleteReq) returns (FriendDeleteResp);
+  rpc FriendSearch(FriendSearchReq) returns (FriendSearchResp);
 
   // 群业务：创建群，修改群，群公告，申请群，用户群列表，群成员，申请群，群退出..
 

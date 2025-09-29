@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v3.19.4
-// source: social.proto
+// source: apps/social/rpc/social.proto
 
 package social
 
@@ -23,6 +23,8 @@ const (
 	Social_FriendPutInHandle_FullMethodName    = "/social.social/FriendPutInHandle"
 	Social_FriendPutInList_FullMethodName      = "/social.social/FriendPutInList"
 	Social_FriendList_FullMethodName           = "/social.social/FriendList"
+	Social_FriendDelete_FullMethodName         = "/social.social/FriendDelete"
+	Social_FriendSearch_FullMethodName         = "/social.social/FriendSearch"
 	Social_GroupCreate_FullMethodName          = "/social.social/GroupCreate"
 	Social_GroupPutin_FullMethodName           = "/social.social/GroupPutin"
 	Social_GroupPutinList_FullMethodName       = "/social.social/GroupPutinList"
@@ -40,6 +42,8 @@ type SocialClient interface {
 	FriendPutInHandle(ctx context.Context, in *FriendPutInHandleReq, opts ...grpc.CallOption) (*FriendPutInHandleResp, error)
 	FriendPutInList(ctx context.Context, in *FriendPutInListReq, opts ...grpc.CallOption) (*FriendPutInListResp, error)
 	FriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error)
+	FriendDelete(ctx context.Context, in *FriendDeleteReq, opts ...grpc.CallOption) (*FriendDeleteResp, error)
+	FriendSearch(ctx context.Context, in *FriendSearchReq, opts ...grpc.CallOption) (*FriendSearchResp, error)
 	GroupCreate(ctx context.Context, in *GroupCreateReq, opts ...grpc.CallOption) (*GroupCreateResp, error)
 	GroupPutin(ctx context.Context, in *GroupPutinReq, opts ...grpc.CallOption) (*GroupPutinResp, error)
 	GroupPutinList(ctx context.Context, in *GroupPutinListReq, opts ...grpc.CallOption) (*GroupPutinListResp, error)
@@ -88,6 +92,24 @@ func (c *socialClient) FriendPutInList(ctx context.Context, in *FriendPutInListR
 func (c *socialClient) FriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error) {
 	out := new(FriendListResp)
 	err := c.cc.Invoke(ctx, Social_FriendList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialClient) FriendDelete(ctx context.Context, in *FriendDeleteReq, opts ...grpc.CallOption) (*FriendDeleteResp, error) {
+	out := new(FriendDeleteResp)
+	err := c.cc.Invoke(ctx, Social_FriendDelete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *socialClient) FriendSearch(ctx context.Context, in *FriendSearchReq, opts ...grpc.CallOption) (*FriendSearchResp, error) {
+	out := new(FriendSearchResp)
+	err := c.cc.Invoke(ctx, Social_FriendSearch_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -165,6 +187,8 @@ type SocialServer interface {
 	FriendPutInHandle(context.Context, *FriendPutInHandleReq) (*FriendPutInHandleResp, error)
 	FriendPutInList(context.Context, *FriendPutInListReq) (*FriendPutInListResp, error)
 	FriendList(context.Context, *FriendListReq) (*FriendListResp, error)
+	FriendDelete(context.Context, *FriendDeleteReq) (*FriendDeleteResp, error)
+	FriendSearch(context.Context, *FriendSearchReq) (*FriendSearchResp, error)
 	GroupCreate(context.Context, *GroupCreateReq) (*GroupCreateResp, error)
 	GroupPutin(context.Context, *GroupPutinReq) (*GroupPutinResp, error)
 	GroupPutinList(context.Context, *GroupPutinListReq) (*GroupPutinListResp, error)
@@ -191,6 +215,12 @@ func (UnimplementedSocialServer) FriendPutInList(context.Context, *FriendPutInLi
 }
 func (UnimplementedSocialServer) FriendList(context.Context, *FriendListReq) (*FriendListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FriendList not implemented")
+}
+func (UnimplementedSocialServer) FriendDelete(context.Context, *FriendDeleteReq) (*FriendDeleteResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FriendDelete not implemented")
+}
+func (UnimplementedSocialServer) FriendSearch(context.Context, *FriendSearchReq) (*FriendSearchResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FriendSearch not implemented")
 }
 func (UnimplementedSocialServer) GroupCreate(context.Context, *GroupCreateReq) (*GroupCreateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GroupCreate not implemented")
@@ -294,6 +324,42 @@ func _Social_FriendList_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SocialServer).FriendList(ctx, req.(*FriendListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Social_FriendDelete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendDeleteReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServer).FriendDelete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Social_FriendDelete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServer).FriendDelete(ctx, req.(*FriendDeleteReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Social_FriendSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendSearchReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SocialServer).FriendSearch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Social_FriendSearch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SocialServer).FriendSearch(ctx, req.(*FriendSearchReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -448,6 +514,14 @@ var Social_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Social_FriendList_Handler,
 		},
 		{
+			MethodName: "FriendDelete",
+			Handler:    _Social_FriendDelete_Handler,
+		},
+		{
+			MethodName: "FriendSearch",
+			Handler:    _Social_FriendSearch_Handler,
+		},
+		{
 			MethodName: "GroupCreate",
 			Handler:    _Social_GroupCreate_Handler,
 		},
@@ -477,5 +551,5 @@ var Social_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "social.proto",
+	Metadata: "apps/social/rpc/social.proto",
 }

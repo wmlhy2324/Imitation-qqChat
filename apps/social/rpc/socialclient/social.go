@@ -15,6 +15,8 @@ import (
 type (
 	FriendAndGroupSearchReq  = social.FriendAndGroupSearchReq
 	FriendAndGroupSearchResp = social.FriendAndGroupSearchResp
+	FriendDeleteReq          = social.FriendDeleteReq
+	FriendDeleteResp         = social.FriendDeleteResp
 	FriendListReq            = social.FriendListReq
 	FriendListResp           = social.FriendListResp
 	FriendPutInHandleReq     = social.FriendPutInHandleReq
@@ -24,6 +26,8 @@ type (
 	FriendPutInReq           = social.FriendPutInReq
 	FriendPutInResp          = social.FriendPutInResp
 	FriendRequests           = social.FriendRequests
+	FriendSearchReq          = social.FriendSearchReq
+	FriendSearchResp         = social.FriendSearchResp
 	Friends                  = social.Friends
 	GroupCreateReq           = social.GroupCreateReq
 	GroupCreateResp          = social.GroupCreateResp
@@ -48,6 +52,8 @@ type (
 		FriendPutInHandle(ctx context.Context, in *FriendPutInHandleReq, opts ...grpc.CallOption) (*FriendPutInHandleResp, error)
 		FriendPutInList(ctx context.Context, in *FriendPutInListReq, opts ...grpc.CallOption) (*FriendPutInListResp, error)
 		FriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error)
+		FriendDelete(ctx context.Context, in *FriendDeleteReq, opts ...grpc.CallOption) (*FriendDeleteResp, error)
+		FriendSearch(ctx context.Context, in *FriendSearchReq, opts ...grpc.CallOption) (*FriendSearchResp, error)
 		GroupCreate(ctx context.Context, in *GroupCreateReq, opts ...grpc.CallOption) (*GroupCreateResp, error)
 		GroupPutin(ctx context.Context, in *GroupPutinReq, opts ...grpc.CallOption) (*GroupPutinResp, error)
 		GroupPutinList(ctx context.Context, in *GroupPutinListReq, opts ...grpc.CallOption) (*GroupPutinListResp, error)
@@ -87,6 +93,16 @@ func (m *defaultSocial) FriendPutInList(ctx context.Context, in *FriendPutInList
 func (m *defaultSocial) FriendList(ctx context.Context, in *FriendListReq, opts ...grpc.CallOption) (*FriendListResp, error) {
 	client := social.NewSocialClient(m.cli.Conn())
 	return client.FriendList(ctx, in, opts...)
+}
+
+func (m *defaultSocial) FriendDelete(ctx context.Context, in *FriendDeleteReq, opts ...grpc.CallOption) (*FriendDeleteResp, error) {
+	client := social.NewSocialClient(m.cli.Conn())
+	return client.FriendDelete(ctx, in, opts...)
+}
+
+func (m *defaultSocial) FriendSearch(ctx context.Context, in *FriendSearchReq, opts ...grpc.CallOption) (*FriendSearchResp, error) {
+	client := social.NewSocialClient(m.cli.Conn())
+	return client.FriendSearch(ctx, in, opts...)
 }
 
 func (m *defaultSocial) GroupCreate(ctx context.Context, in *GroupCreateReq, opts ...grpc.CallOption) (*GroupCreateResp, error) {
