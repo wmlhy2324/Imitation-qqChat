@@ -25,7 +25,7 @@ type Conversation struct {
 	TargetId string `bson:"targetId,omitempty"`
 
 	// 是否在会话列表中显示此会话，true=显示，false=隐藏
-	IsShow bool `bson:"isShow,omitempty"`
+	IsShow bool `bson:"isShow"`
 
 	// 该会话的消息总数量
 	Total int `bson:"total,omitempty"`

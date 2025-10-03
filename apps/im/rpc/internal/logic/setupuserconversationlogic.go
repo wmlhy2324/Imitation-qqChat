@@ -37,8 +37,8 @@ func (l *SetUpUserConversationLogic) SetUpUserConversation(in *im.SetUpUserConve
 	case constants.SingleChatType:
 		// 生成会话的id
 		conversationId := wuid.CombineId(in.SendId, in.RecvId)
-		// 验证是否建立过会话,todo 条件加上targetId
-		conversationRes, err := l.svcCtx.ConversationModel.FindOne(l.ctx, conversationId)
+		// 验证是否建立过会话
+		conversationRes, err := l.svcCtx.ConversationModel.FindOneByConversationIdAndTargetId(l.ctx, conversationId, in.RecvId)
 		if err != nil {
 			// 建立会话
 			if errors.Is(err, immodels.ErrNotFound) {
@@ -62,10 +62,10 @@ func (l *SetUpUserConversationLogic) SetUpUserConversation(in *im.SetUpUserConve
 		if err != nil {
 			return nil, err
 		}
-		err = l.setUpUserConversation(conversationId, in.RecvId, in.SendId, constants.SingleChatType, false)
-		if err != nil {
-			return nil, err
-		}
+		//err = l.setUpUserConversation(conversationId, in.RecvId, in.SendId, constants.SingleChatType, false)
+		//if err != nil {
+		//	return nil, err
+		//}
 	case constants.GroupChatType:
 		err := l.setUpUserConversation(in.RecvId, in.SendId, in.RecvId, constants.GroupChatType, true)
 		if err != nil {
@@ -92,8 +92,13 @@ func (l *SetUpUserConversationLogic) setUpUserConversation(conversationId, userI
 		}
 	}
 
-	// 更新会话记录
+	// 更新会话记录, 已存在则更新
 	if _, ok := conversations.ConversationList[conversationId]; ok {
+		conversations.ConversationList[conversationId].IsShow = isShow
+		err = l.svcCtx.ConversationsModel.Update(l.ctx, conversations)
+		if err != nil {
+			return errors.Wrapf(xerr.NewDBErr(), "ConversationsModel.Update err %v, req %v", err, conversations)
+		}
 		return nil
 	}
 
