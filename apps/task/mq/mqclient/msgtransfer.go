@@ -7,6 +7,7 @@ package mqclient
 
 import (
 	"encoding/json"
+
 	"github.com/zeromicro/go-queue/kq"
 	"imooc.com/easy-chat/apps/task/mq/mq"
 )
@@ -49,6 +50,29 @@ func NewMsgReadTransferClient(addr []string, topic string, opts ...kq.PushOption
 }
 
 func (c *msgReadTransferClient) Push(msg *mq.MsgMarkRead) error {
+	body, err := json.Marshal(msg)
+	if err != nil {
+		return err
+	}
+
+	return c.pusher.Push(string(body))
+}
+
+type MsgRevokeTransferClient interface {
+	Push(msg *mq.MsgRevokeTransfer) error
+}
+
+type msgRevokeTransferClient struct {
+	pusher *kq.Pusher
+}
+
+func NewMsgRevokeTransferClient(addr []string, topic string, opts ...kq.PushOption) MsgRevokeTransferClient {
+	return &msgRevokeTransferClient{
+		pusher: kq.NewPusher(addr, topic),
+	}
+}
+
+func (c *msgRevokeTransferClient) Push(msg *mq.MsgRevokeTransfer) error {
 	body, err := json.Marshal(msg)
 	if err != nil {
 		return err

@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"imooc.com/easy-chat/pkg/configserver"
 	"imooc.com/easy-chat/pkg/interceptor/rpcserver"
-	"sync"
 
 	"imooc.com/easy-chat/apps/im/rpc/im"
 	"imooc.com/easy-chat/apps/im/rpc/internal/config"
@@ -26,13 +27,14 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "im",
-		Configs:        "im-rpc.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "127.0.0.1",
+		Namespace: "im",
+		Group:     "DEFAULT_GROUP",
+		DataId:    "im-rpc.yaml",
+		Username:  "nacos",
+		Password:  "nacos",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

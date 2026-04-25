@@ -1,28 +1,27 @@
-version: '3'
-
 services:
   etcd:
-    image: bitnami/etcd:3.4.15
+    image: quay.io/coreos/etcd:v3.5.9
     container_name: etcd
     ports:
       - "3379:2379"
       - "3380:2380"
     environment:
       - ETCD_ENABLE_V2=true
-      - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://127.0.0.1:3379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379
       - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
+      - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:2380
+      - ETCD_INITIAL_CLUSTER=etcd=http://0.0.0.0:2380
       - ETCD_NAME=etcd
     volumes:
-      - ./components/etcd/data:/bitnami/etcd/data
-      - ./components/etcd/logs:/bitnami/etcd/logs
+      - ./components/etcd/data:/etcd-data
     networks:
       easy-chat:
 
   redis:
     image: redis:alpine3.18
     ports:
-      - 16379:6379
+      - "16379:6379"
     container_name: redis
     volumes:
       - ./components/redis/data:/data
@@ -37,7 +36,7 @@ services:
   mysql:
     image: mysql:8.0
     ports:
-      - 13306:3306
+      - "23306:3306"
     container_name: mysql
     volumes:
       - ./components/mysql/data:/var/lib/mysql
@@ -55,7 +54,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: easy-chat
     ports:
-      - 47017:27017
+      - "47017:27017"
     volumes:
       - ./components/mongo/data:/data/db
       - /etc/localtime:/etc/localtime
@@ -66,7 +65,7 @@ services:
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
-      - 2181:2181
+      - "2181:2181"
     container_name: zookeeper
     volumes:
       - /etc/localtime:/etc/localtime
@@ -81,7 +80,7 @@ services:
     container_name: kafka
     restart: always
     ports:
-      - 9092:9092
+      - "9092:9092"
     environment:
       TZ: Asia/Shanghai
       KAFKA_BROKER_ID: 0
@@ -114,6 +113,7 @@ services:
     image: apache/apisix:${APISIX_IMAGE_TAG:-3.2.0-debian}
     container_name: apisix
     restart: always
+    user: "0:0"
     depends_on:
       - etcd
       - apisix-dashboard
@@ -142,19 +142,50 @@ services:
     restart: always
     networks:
       easy-chat:
-  sail:
-    image: ccr.ccs.tencentyun.com/hyy-yu/sail:latest
-    container_name: sail
+  nacos:
+    image: nacos/nacos-server:v2.2.3
+    container_name: nacos
+    environment:
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=easy-chat
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=10000&socketTimeout=30000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567
+      - NACOS_AUTH_IDENTITY_KEY=nacos
+      - NACOS_AUTH_IDENTITY_VALUE=nacos
+      - JVM_XMS=512m
+      - JVM_XMX=512m
     ports:
-      - "8108:8108"
+      - "8848:8848"
+      - "9848:9848"
     volumes:
-      - "./components/sail/compose-cfg.toml:/app/cfg.toml"
+      - ./components/nacos/logs:/home/nacos/logs
+      - ./components/nacos/data:/home/nacos/data
+    depends_on:
+      - mysql
     restart: always
-    platform: linux/arm64
     networks:
       easy-chat:
+  # sail:
+  #   image: ccr.ccs.tencentyun.com/hyy-yu/sail:latest
+  #   container_name: sail
+  #   ports:
+  #     - "8108:8108"
+  #   volumes:
+  #     - "./components/sail/compose-cfg.toml:/app/cfg.toml"
+  #   restart: always
+  #   # platform: linux/amd64  # 镜像只有 ARM64 版本，移除平台限制让其通过模拟器运行
+  #   networks:
+  #     easy-chat:
   elasticsearch:
     image: elasticsearch:7.17.4
+    user: "1000:1000"
     volumes:
       - /etc/localtime:/etc/localtime
       - ./components/elasticsearch/data:/usr/share/elasticsearch/data
@@ -167,6 +198,7 @@ services:
       - 'cluster.name=elasticsearch'
       - 'discovery.type=single-node'
       - 'ES_JAVA_OPTS=-Xms1024m -Xmx1024m'
+      - 'xpack.security.enabled=false'
     networks:
       easy-chat:
 

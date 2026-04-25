@@ -36,6 +36,9 @@ type Conversation struct {
 	// 会话中最新的一条消息，用于在会话列表中显示预览
 	Msg *ChatLog `bson:"msg,omitempty"`
 
+	// 清空会话时间戳，用户已删除此时间之前的所有消息
+	ClearUpTo int64 `bson:"clearUpTo,omitempty"`
+
 	// 会话最后更新时间，每当有新消息时更新
 	UpdateAt time.Time `bson:"updateAt,omitempty" json:"updateAt,omitempty"`
 

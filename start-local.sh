@@ -115,8 +115,8 @@ start_service() {
 echo -e "${BLUE}检查依赖服务...${NC}"
 
 # 检查 MySQL
-if ! nc -z 127.0.0.1 13306 2>/dev/null; then
-    echo -e "${RED}错误: MySQL 服务 (127.0.0.1:13306) 未启动${NC}"
+if ! nc -z 127.0.0.1 23306 2>/dev/null; then
+    echo -e "${RED}错误: MySQL 服务 (127.0.0.1:23306) 未启动${NC}"
     exit 1
 fi
 echo -e "${GREEN}✓ MySQL 服务正常${NC}"

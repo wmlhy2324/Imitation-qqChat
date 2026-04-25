@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
@@ -13,7 +15,6 @@ import (
 	"imooc.com/easy-chat/apps/social/rpc/social"
 	"imooc.com/easy-chat/pkg/configserver"
 	"imooc.com/easy-chat/pkg/interceptor/rpcserver"
-	"sync"
 )
 
 var configFile = flag.String("f", "etc/dev/social.yaml", "the config file")
@@ -24,13 +25,14 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "social",
-		Configs:        "social-rpc.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "127.0.0.1",
+		Namespace: "social",
+		Group:     "DEFAULT_GROUP",
+		DataId:    "social-rpc.yaml",
+		Username:  "nacos",
+		Password:  "nacos",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

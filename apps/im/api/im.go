@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"github.com/zeromicro/go-zero/core/proc"
 	"imooc.com/easy-chat/pkg/configserver"
-	"sync"
 
 	"imooc.com/easy-chat/apps/im/api/internal/config"
 	"imooc.com/easy-chat/apps/im/api/internal/handler"
@@ -22,13 +23,14 @@ func main() {
 
 	var c config.Config
 
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "im",
-		Configs:        "im-api.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "127.0.0.1",
+		Namespace: "im",
+		Group:     "DEFAULT_GROUP",
+		DataId:    "im-api.yaml",
+		Username:  "nacos",
+		Password:  "nacos",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

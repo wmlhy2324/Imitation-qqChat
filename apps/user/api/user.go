@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"github.com/zeromicro/go-zero/core/proc"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
@@ -11,7 +13,6 @@ import (
 	"imooc.com/easy-chat/apps/user/api/internal/svc"
 	"imooc.com/easy-chat/pkg/configserver"
 	"imooc.com/easy-chat/pkg/resultx"
-	"sync"
 )
 
 var configFile = flag.String("f", "etc/dev/user.yaml", "the config file")
@@ -24,13 +25,14 @@ func main() {
 	var c config.Config
 	//conf.MustLoad(*configFile, &c)
 
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "user",
-		Configs:        "user-api.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "127.0.0.1",
+		Namespace: "user",
+		Group:     "DEFAULT_GROUP",
+		DataId:    "user-api.yaml",
+		Username:  "nacos",
+		Password:  "nacos",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

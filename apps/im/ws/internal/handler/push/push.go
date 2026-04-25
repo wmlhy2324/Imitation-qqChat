@@ -20,6 +20,11 @@ func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
 			srv.Send(websocket.NewErrMessage(err))
 			return
 		}
+		// 撤回类型：直接推送撤回通知
+		if data.ContentType == constants.ContentRevoke {
+			revoke(srv, &data)
+			return
+		}
 		// 发送的目标
 		switch data.ChatType {
 		case constants.SingleChatType:
@@ -61,4 +66,46 @@ func group(srv *websocket.Server, data *ws.Push) error {
 		}(id)
 	}
 	return nil
+}
+
+// revoke 推送撤回通知（与普通消息推送格式不同）
+func revoke(srv *websocket.Server, data *ws.Push) {
+	switch data.ChatType {
+	case constants.SingleChatType:
+		rconn := srv.GetConn(data.RecvId)
+		if rconn == nil {
+			return
+		}
+		srv.Send(websocket.NewMessage(data.SendId, &ws.Chat{
+			ConversationId: data.ConversationId,
+			ChatType:       data.ChatType,
+			SendTime:       data.SendTime,
+			Msg: ws.Msg{
+				MsgId:   data.MsgId,
+				Content: data.Content,
+				MType:   data.MType,
+			},
+		}), rconn)
+	case constants.GroupChatType:
+		for _, id := range data.RecvIds {
+			func(id string) {
+				srv.Schedule(func() {
+					rconn := srv.GetConn(id)
+					if rconn == nil {
+						return
+					}
+					srv.Send(websocket.NewMessage(data.SendId, &ws.Chat{
+						ConversationId: data.ConversationId,
+						ChatType:       data.ChatType,
+						SendTime:       data.SendTime,
+						Msg: ws.Msg{
+							MsgId:   data.MsgId,
+							Content: data.Content,
+							MType:   data.MType,
+						},
+					}), rconn)
+				})
+			}(id)
+		}
+	}
 }

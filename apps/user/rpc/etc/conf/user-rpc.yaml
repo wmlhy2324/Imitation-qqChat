@@ -11,7 +11,7 @@ jwt:
     accesssecret: imooc.com
 listenon: 127.0.0.1:10010
 mysql:
-    datasource: root:easy-chat@tcp(127.0.0.1:13306)/easy-chat?charset=utf8mb4
+    datasource: root:easy-chat@tcp(127.0.0.1:23306)/easy-chat?charset=utf8mb4
 name: user.rpc
 redisx:
     host: 127.0.0.1:16379

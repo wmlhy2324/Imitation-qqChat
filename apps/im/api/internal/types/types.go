@@ -69,3 +69,18 @@ type SetUpUserConversationReq struct {
 
 type SetUpUserConversationResp struct {
 }
+
+type DeleteChatLogReq struct {
+	MsgId          string `json:"msgId"`
+	ConversationId string `json:"conversationId"`
+}
+
+type DeleteChatLogResp struct {
+}
+
+type ClearConversationReq struct {
+	ConversationId string `json:"conversationId"`
+}
+
+type ClearConversationResp struct {
+}

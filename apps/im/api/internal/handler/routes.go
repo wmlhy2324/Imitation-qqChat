@@ -48,6 +48,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/setup/conversation",
 				Handler: setUpUserConversationHandler(serverCtx),
 			},
+			{
+				// 删除单条聊天记录
+				Method:  http.MethodDelete,
+				Path:    "/chatlog",
+				Handler: deleteChatLogHandler(serverCtx),
+			},
+			{
+				// 清空会话聊天记录
+				Method:  http.MethodDelete,
+				Path:    "/conversation/clear",
+				Handler: clearConversationHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/v1/im"),

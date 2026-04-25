@@ -19,3 +19,8 @@ MsgReadTransfer:
   Topic: msgReadTransfer
   Addrs:
     - 127.0.0.1:9092
+
+MsgRevokeTransfer:
+  Topic: msgRevokeTransfer
+  Addrs:
+    - 127.0.0.1:9092

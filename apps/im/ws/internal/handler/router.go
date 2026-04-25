@@ -28,6 +28,10 @@ func RegisterHandlers(srv *websocket.Server, svc *svc.ServiceContext) {
 			Handler: conversation.MarkRead(svc),
 		},
 		{
+			Method:  "conversation.revoke",
+			Handler: conversation.Revoke(svc),
+		},
+		{
 			Method:  "push",
 			Handler: push.Push(svc),
 		},

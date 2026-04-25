@@ -34,4 +34,9 @@ type Config struct {
 		Topic string
 		Addrs []string
 	}
+
+	MsgRevokeTransfer struct {
+		Topic string
+		Addrs []string
+	}
 }

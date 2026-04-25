@@ -16,8 +16,9 @@ type Config struct {
 	service.ServiceConf
 	ListenOn string
 
-	MsgChatTransfer kq.KqConf
-	MsgReadTransfer kq.KqConf
+	MsgChatTransfer   kq.KqConf
+	MsgReadTransfer   kq.KqConf
+	MsgRevokeTransfer kq.KqConf
 
 	Redisx redis.RedisConf
 	Mongo  struct {

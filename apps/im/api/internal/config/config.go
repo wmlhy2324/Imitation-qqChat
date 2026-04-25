@@ -12,6 +12,11 @@ type Config struct {
 	UserRpc   zrpc.RpcClientConf
 	SocialRpc zrpc.RpcClientConf
 
+	Mongo struct {
+		Url string
+		Db  string
+	}
+
 	JwtAuth struct {
 		AccessSecret string
 	}

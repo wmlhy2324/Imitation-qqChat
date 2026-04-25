@@ -19,6 +19,15 @@ MsgReadTransfer:
   Offset: first
   Consumers: 1
 
+MsgRevokeTransfer:
+  Name: MsgRevokeTransfer
+  Brokers:
+    - 127.0.0.1:9092
+  Group: kafka-revoke
+  Topic: msgRevokeTransfer
+  Offset: last
+  Consumers: 1
+
 MsgReadHandler:
   GroupMsgReadHandler: 1
   GroupMsgReadRecordDelayTime: 2

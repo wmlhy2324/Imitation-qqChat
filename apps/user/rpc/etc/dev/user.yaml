@@ -6,7 +6,7 @@ Etcd:
   Key: user.rpc
 
 Mysql:
-  DataSource: root:easy-chat@tcp(127.0.0.1:13306)/easy-chat?charset=utf8mb4
+  DataSource: root:easy-chat@tcp(127.0.0.1:23306)/easy-chat?charset=utf8mb4
 
 Redisx:
   Host: 127.0.0.1:16379

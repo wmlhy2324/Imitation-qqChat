@@ -28,3 +28,10 @@ type MsgMarkRead struct {
 	RecvId             string   `json:"recvId"`
 	MsgIds             []string `json:"msgIds"`
 }
+
+type MsgRevokeTransfer struct {
+	MsgId          string `json:"msgId"`
+	ConversationId string `json:"conversationId"`
+	ChatType       int32  `json:"chatType"`
+	SendId         string `json:"sendId"` // 发起撤回的人
+}

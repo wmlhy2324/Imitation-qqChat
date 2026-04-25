@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"imooc.com/easy-chat/pkg/configserver"
 	"imooc.com/easy-chat/pkg/interceptor/rpcserver"
-	"sync"
 
 	"imooc.com/easy-chat/apps/user/rpc/internal/config"
 	"imooc.com/easy-chat/apps/user/rpc/internal/server"
@@ -28,13 +29,14 @@ func main() {
 
 	var c config.Config
 
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "user",
-		Configs:        "user-rpc.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "localhost",
+		Namespace: "32d1730b-5d98-4cde-b0eb-52fcda17e2f8", // user 命名空间的实际 ID
+		Group:     "DEFAULT_GROUP",
+		DataId:    "user-rpc.yaml",
+		Username:  "nacos",
+		Password:  "wmlhy15723351559",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

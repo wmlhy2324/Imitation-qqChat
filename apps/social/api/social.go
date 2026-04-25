@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"sync"
+
 	"github.com/zeromicro/go-zero/core/proc"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"imooc.com/easy-chat/pkg/configserver"
 	"imooc.com/easy-chat/pkg/resultx"
-	"sync"
 
 	"imooc.com/easy-chat/apps/social/api/internal/config"
 	"imooc.com/easy-chat/apps/social/api/internal/handler"
@@ -23,13 +24,14 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	err := configserver.NewConfigServer(*configFile, configserver.NewSail(&configserver.Config{
-		ETCDEndpoints:  "127.0.0.1:3379",
-		ProjectKey:     "98c6f2c2287f4c73cea3d40ae7ec3ff2",
-		Namespace:      "social",
-		Configs:        "social-api.yaml",
-		ConfigFilePath: "./etc/conf",
-		LogLevel:       "DEBUG",
+	err := configserver.NewConfigServer(*configFile, configserver.NewNacos(&configserver.NacosConfig{
+		Addr:      "127.0.0.1",
+		Namespace: "social",
+		Group:     "DEFAULT_GROUP",
+		DataId:    "social-api.yaml",
+		Username:  "nacos",
+		Password:  "nacos",
+		LogLevel:  "warn",
 	})).MustLoad(&c, func(bytes []byte) error {
 		var c config.Config
 		configserver.LoadFromJsonBytes(bytes, &c)

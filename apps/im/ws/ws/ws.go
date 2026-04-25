@@ -49,4 +49,9 @@ type (
 		ConversationId     string   `mapstructure:"conversationId"`
 		MsgIds             []string `mapstructure:"msgIds"`
 	}
+
+	Revoke struct {
+		MsgId          string `mapstructure:"msgId"`
+		ConversationId string `mapstructure:"conversationId"`
+	}
 )

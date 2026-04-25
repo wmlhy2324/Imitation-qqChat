@@ -23,4 +23,5 @@ type ContentType int
 const (
 	ContentChatMsg ContentType = iota
 	ContentMakeRead
+	ContentRevoke
 )

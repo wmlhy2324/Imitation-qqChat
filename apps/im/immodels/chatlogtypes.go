@@ -49,7 +49,7 @@ type ChatLog struct {
 	SendTime int64 `bson:"sendTime"`
 
 	// Status 消息状态
-	// 如：0-发送中, 1-已发送, 2-已送达, 3-已读, -1-发送失败
+	// 如：0-发送中, 1-已发送, 2-已送达, 3-已读, 4-已撤回, -1-发送失败
 	Status int `bson:"status"`
 
 	// ReadRecords 消息已读记录

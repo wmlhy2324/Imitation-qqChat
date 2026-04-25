@@ -11,14 +11,16 @@ type ServiceContext struct {
 	immodels.ChatLogModel
 	immodels.ConversationsModel
 	immodels.ConversationModel
+	immodels.UserMessageDeletesModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 
-		ChatLogModel:       immodels.MustChatLogModel(c.Mongo.Url, c.Mongo.Db),
-		ConversationsModel: immodels.MustConversationsModel(c.Mongo.Url, c.Mongo.Db),
-		ConversationModel:  immodels.MustConversationModel(c.Mongo.Url, c.Mongo.Db),
+		ChatLogModel:            immodels.MustChatLogModel(c.Mongo.Url, c.Mongo.Db),
+		ConversationsModel:      immodels.MustConversationsModel(c.Mongo.Url, c.Mongo.Db),
+		ConversationModel:       immodels.MustConversationModel(c.Mongo.Url, c.Mongo.Db),
+		UserMessageDeletesModel: immodels.MustUserMessageDeletesModel(c.Mongo.Url, c.Mongo.Db),
 	}
 }

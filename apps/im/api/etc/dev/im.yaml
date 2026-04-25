@@ -20,5 +20,9 @@ SocialRpc:
       - 127.0.0.1:3379
     Key: social.rpc
 
+Mongo:
+  Url: "mongodb://root:easy-chat@127.0.0.1:47017"
+  Db: easy-chat
+
 JwtAuth:
   AccessSecret: imooc.com
